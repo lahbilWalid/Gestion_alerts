@@ -112,8 +112,10 @@ class AlertApp:
         if not self.alertQueue.empty():
             new_alerte = self.alertQueue.get()
             print(f"{new_alerte.nom} détectée")
-            chemin = f"C:\\Users\\wlahbil\\PycharmProjects\\Ecockpit\\waves\\{new_alerte.son}"
-            notif_path = "C:\\Users\\wlahbil\\PycharmProjects\\Ecockpit\\waves\\notif.wav"
+            chemin_local = f"C:\\Users\\wlahbil\\PycharmProjects\\Ecockpit\\waves\\{new_alerte.son}"
+            chemin = f"Waves\\{new_alerte.son}"
+            notif_path_local = "C:\\Users\\wlahbil\\PycharmProjects\\Ecockpit\\waves\\notif.wav"
+            notif_path = "Waves\\notif.wav"
             sound = mixer.Sound(chemin)
             self.tree.insert("", "end", values=(new_alerte.horodatage, new_alerte.nom, new_alerte.priority,  new_alerte.icon, new_alerte.son), tags=(f"priorite{new_alerte.priority}",))
             self.journaliser(new_alerte)
