@@ -81,6 +81,7 @@ class AlertApp:
         sensor_frame = tk.Frame(root)
         sensor_frame.pack(pady=10)
 
+        # add buttons for sensors
         for sensor, alert_name in Alert_sensor.items():
             btn = tk.Button(sensor_frame, text = sensor, command = lambda a=alert_name: self.genererAlert(a))
             btn.pack(side=tk.LEFT, padx=5, pady=5)
@@ -139,7 +140,7 @@ class AlertApp:
             self.current_channel = mixer.find_channel()
 
             if self.current_channel:
-                self.current_channel.play(sound, loops=2)
+                self.current_channel.play(sound)
 
 
     def filtrer_alertes(self, event=None):
