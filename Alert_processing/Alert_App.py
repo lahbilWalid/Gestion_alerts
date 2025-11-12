@@ -70,19 +70,21 @@ class AlertManager:
                 if new_alerte.priority < self.current_alert.priority:
                     if self.current_channel and self.current_channel.get_busy():
                         self.current_channel.stop()
-                        print(f"L'alerte {self.current_alert.nom} est interrompue")
+                        print(f"{self.current_alert.nom} est interrompue (moins prioritaire)")
+                        print("///")
                 elif new_alerte.priority >= self.current_alert.priority:
                     if self.current_channel and self.current_channel.get_busy():
                         notif_sound = mixer.Sound(notif_path)
                         channel = mixer.find_channel()
                         if channel:
                             channel.play(notif_sound)
+                            print(f"{self.current_alert.nom} continue de jouer (plus prioritaire ou avec la même priorité)")
+                            print("///")
                         return
 
             self.current_alert = new_alerte
             self.current_channel = mixer.find_channel()
             if self.current_channel:
-                print("im here")
                 self.current_channel.play(sound, loops=3)
 
     def _journaliser(self, alerte):
