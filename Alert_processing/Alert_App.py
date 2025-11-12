@@ -7,6 +7,7 @@ from tkinter import ttk
 from pygame import mixer
 from queue import PriorityQueue
 import logging
+import requests
 
 # Charger la configuration
 with open("Alerts_config.json", "r", encoding="utf-8") as Al:
@@ -82,8 +83,7 @@ class AlertManager:
             self.current_alert = new_alerte
             self.current_channel = mixer.find_channel()
             if self.current_channel:
-                print("im here")
-                self.current_channel.play(sound, loops=3)
+                self.current_channel.play(sound)
 
     def _journaliser(self, alerte):
         if alerte.priority == 1:
@@ -99,6 +99,15 @@ class AlertApp:
         self.root = root
         self.manager = manager
         self.root.title("Simulation des alertes du smart car Ecockpit")
+
+        # Variable pour le mode test
+        self.test_mode = tk.BooleanVar(value=False)
+
+        # swich checkbutton
+        test_frame = tk.Frame(root)
+        test_frame.pack(pady=5)
+        tk.Label(test_frame, text="Mode Test:").pack(side=tk.LEFT)
+        tk.Checkbutton(test_frame, text="ON/OFF", variable=self.test_mode).pack(side=tk.LEFT)
 
         # Interface graphique
         self.tree = ttk.Treeview(root, columns=("Horodatage","Alert", "Priorité", "Icône", "Son"), show="headings")
@@ -134,6 +143,7 @@ class AlertApp:
             btn = tk.Button(sensor_frame, text=sensor, command=lambda a=alert_name: self.genererAlert(a))
             btn.pack(side=tk.LEFT, padx=5, pady=5)
 
+
     def genererAlert(self, alert=None):
         nom = alert if alert else random.choice(list(Alert_priority.keys()))
         priority = Alert_priority[nom]
@@ -142,11 +152,20 @@ class AlertApp:
         son = Alert_son[nom]
 
         alerte = Alerte(nom, priority, horodatage, icon, son)
+
         self.all_alerts.append(alerte)
         self.tree.insert("", "end", values=(alerte.horodatage, alerte.nom, alerte.priority, alerte.icon, alerte.son), tags=(f"priorite{alerte.priority}",))
 
         # Déclencher via AlertManager
-        self.manager.declencher_alerte(nom)
+        if self.test_mode.get():
+            try:
+                requests.post("http://localhost:5001/play", json={"nom": nom})
+            except Exception as e:
+                print(f"Erreur envoi alerte: {e}")
+                print("lance test_sound.py !")
+
+        else:
+            self.manager.declencher_alerte(nom)
 
     def filtrer_alertes(self, event=None):
         filtre = self.filter_var.get()
