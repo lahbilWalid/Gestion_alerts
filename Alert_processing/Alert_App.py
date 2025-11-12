@@ -85,7 +85,7 @@ class AlertManager:
             self.current_alert = new_alerte
             self.current_channel = mixer.find_channel()
             if self.current_channel:
-                self.current_channel.play(sound, loops=3)
+                self.current_channel.play(sound)
 
     def _journaliser(self, alerte):
         if alerte.priority == 1:
