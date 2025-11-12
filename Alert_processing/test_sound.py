@@ -15,7 +15,6 @@ def play_sound():
     if nom:
         manager.declencher_alerte(nom)
         print("je joue depuis test_sound")
-        time.sleep(0.1)
     else:
         print("son introuvable")
 
