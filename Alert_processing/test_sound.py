@@ -16,8 +16,7 @@ def play_sound():
         manager.declencher_alerte(nom)
         print("je joue depuis test_sound")
     else:
-        print("son introuvable")
-
+        print("son introuvable //////")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001)
