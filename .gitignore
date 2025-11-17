@@ -1,0 +1,5 @@
+.idea/
+Alert_processing/.idea/
+Alert_processing/Test2.py
+Alert_processing/__pycache__/
+Alert_processing/alerts.log
